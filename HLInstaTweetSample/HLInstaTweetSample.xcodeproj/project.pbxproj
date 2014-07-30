@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3C2ED3B21989024E00E0FD91 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C2ED3B11989024E00E0FD91 /* logo.png */; };
 		3CDC8C1C198830F600E30072 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CDC8C1B198830F600E30072 /* Foundation.framework */; };
 		3CDC8C1E198830F600E30072 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CDC8C1D198830F600E30072 /* CoreGraphics.framework */; };
 		3CDC8C20198830F600E30072 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CDC8C1F198830F600E30072 /* UIKit.framework */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3C2ED3B11989024E00E0FD91 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
 		3CDC8C18198830F600E30072 /* HLInstaTweetSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HLInstaTweetSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CDC8C1B198830F600E30072 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		3CDC8C1D198830F600E30072 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -84,6 +86,7 @@
 		3CDC8C21198830F600E30072 /* HLInstaTweetSample */ = {
 			isa = PBXGroup;
 			children = (
+				3C2ED3B11989024E00E0FD91 /* logo.png */,
 				3CDC8C2A198830F600E30072 /* AppDelegate.h */,
 				3CDC8C2B198830F600E30072 /* AppDelegate.m */,
 				3CDC8C2D198830F600E30072 /* Main.storyboard */,
@@ -169,6 +172,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C2ED3B21989024E00E0FD91 /* logo.png in Resources */,
 				3CDC8C34198830F600E30072 /* Images.xcassets in Resources */,
 				3CDC8C26198830F600E30072 /* InfoPlist.strings in Resources */,
 				3CDC8C2F198830F600E30072 /* Main.storyboard in Resources */,
@@ -328,6 +332,7 @@
 				3CDC8C4C198830F600E30072 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

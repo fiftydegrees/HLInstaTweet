@@ -94,7 +94,40 @@ typedef void (^TwitterClientInternalAccountCompletion)(ACAccount *account);
 
 - (void)sharePhoto:(UIImage *)photo withTextStatus:(NSString *)status withCompletion:(HLInstaTweetPostCompletion)completion
 {
-    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        
+        if (!_twitterAccount) {
+            [self activeSession];
+            dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
+        }
+        
+        if (!_twitterAccount) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completion(NO);
+            });
+        }
+        else
+        {
+            NSURL *url = [NSURL URLWithString:@"https://api.twitter.com"
+                          @"/1.1/statuses/update_with_media.json"];
+            NSDictionary *params = @{@"status" : status};
+            SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeTwitter
+                                                    requestMethod:SLRequestMethodPOST
+                                                              URL:url
+                                                       parameters:params];
+            NSData *imageData = UIImageJPEGRepresentation(photo, 1.f);
+            [request addMultipartData:imageData
+                             withName:@"media[]"
+                                 type:@"image/jpeg"
+                             filename:@"image.jpg"];
+            [request setAccount:_twitterAccount];
+            [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    completion(urlResponse.statusCode == 200);
+                });
+            }];
+        }
+    });
 }
 
 #pragma mark - Internal Helper
