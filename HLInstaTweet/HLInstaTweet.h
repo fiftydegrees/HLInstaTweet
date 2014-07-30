@@ -36,7 +36,7 @@ typedef void (^HLInstaTweetPostCompletion)(BOOL completed);
 - (void)instaTweetClient:(HLInstaTweet *)instaTweet switchedToAccountWithUsername:(NSString *)username;
 
 /**
- *  Triggered if the user explicitly forbid access to his accounts
+ *  Triggered if the user explicitly forbids access to his accounts
  *
  *  @param instaTweet Claiment HLInstaTweet instance
  */

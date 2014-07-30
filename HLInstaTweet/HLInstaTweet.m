@@ -48,8 +48,14 @@ typedef void (^TwitterClientInternalAccountCompletion)(ACAccount *account);
     [self authorizeAccessUsingLastUsedSession:YES];
 }
 
-- (NSString *)activeSessionUsername {
-    return _twitterAccount ? _twitterAccount.username : nil;
+- (NSString *)activeSessionUsername
+{
+    if (_twitterAccount)
+        return _twitterAccount.username;
+    else if ([[NSUserDefaults standardUserDefaults] objectForKey:kTwitterUserDefaultsKey])
+        return [[NSUserDefaults standardUserDefaults] objectForKey:kTwitterUserDefaultsKey];
+    else
+        return nil;
 }
 
 - (void)switchActiveSessionAccount {
