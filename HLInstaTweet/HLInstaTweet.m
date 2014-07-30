@@ -166,6 +166,8 @@ typedef void (^TwitterClientInternalAccountCompletion)(ACAccount *account);
                          if ([account.identifier isEqualToString:cachedAccount]) {
                              _twitterAccount = account;
                              dispatch_semaphore_signal(_semaphore);
+                             if ([delegate respondsToSelector:@selector(instaTweetClient:switchedToAccountWithUsername:)])
+                                 [delegate instaTweetClient:self switchedToAccountWithUsername:_twitterAccount.username];
                              break;
                          }
                  }

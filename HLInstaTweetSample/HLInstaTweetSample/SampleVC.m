@@ -14,6 +14,7 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *statusLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *photoImageView;
+@property (weak, nonatomic) IBOutlet UILabel *activeSessionLabel;
 
 @end
 
@@ -26,7 +27,7 @@
 
 - (IBAction)didTapShareStatus:(id)sender
 {
-    [[HLInstaTweet sharedInstaTweet] shareTextStatus:_statusLabel.text
+    [[HLInstaTweet sharedInstaTweet] shareTextStatus:[NSString stringWithFormat:@"%@ - Rand=(%d)", _statusLabel.text, arc4random() % 100]
                                       withCompletion:^(BOOL completed) {
                                           UIAlertView *resultAV = [[UIAlertView alloc] initWithTitle:@"Result"
                                                                                              message:(completed ? @"Successfully shared" : @"An error occured")
@@ -41,7 +42,7 @@
 - (IBAction)didTapSharePhoto:(id)sender
 {
     [[HLInstaTweet sharedInstaTweet] sharePhoto:_photoImageView.image
-                                 withTextStatus:_statusLabel.text
+                                 withTextStatus:[NSString stringWithFormat:@"%@ - Rand=(%d)", _statusLabel.text, arc4random() % 100]
                                  withCompletion:^(BOOL completed) {
                                      UIAlertView *resultAV = [[UIAlertView alloc] initWithTitle:@"Result"
                                                                                         message:(completed ? @"Successfully shared" : @"An error occured")
@@ -58,6 +59,12 @@
 
 - (UIView *)instaTweetClientWillDisplayAccountSelectorInView:(HLInstaTweet *)twitterClient {
     return self.view;
+}
+
+- (void)instaTweetClient:(HLInstaTweet *)instaTweet switchedToAccountWithUsername:(NSString *)username {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _activeSessionLabel.text = [@"Now logged in as @" stringByAppendingString:username];
+    });
 }
 
 @end

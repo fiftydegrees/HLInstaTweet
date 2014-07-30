@@ -66,11 +66,19 @@
                                 <rect key="frame" x="20" y="215" width="160" height="160"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Current active session : not set" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E15-BU-VQu">
+                                <rect key="frame" x="20" y="536" width="280" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleCaption2"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="HLInstaTweet" id="92s-rz-e0G"/>
                     <connections>
+                        <outlet property="activeSessionLabel" destination="E15-BU-VQu" id="CQB-7U-3O3"/>
                         <outlet property="photoImageView" destination="yr0-OG-S1N" id="kwp-3H-0Uo"/>
                         <outlet property="statusLabel" destination="58P-BU-bVf" id="uc1-cn-Fb0"/>
                     </connections>
