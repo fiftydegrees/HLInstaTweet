@@ -13,6 +13,7 @@
 #import <Twitter/Twitter.h>
 
 #define         kTwitterUserDefaultsKey          @"default_twitter_account"
+#define         kTwitterMaxStatusLength          140
 
 typedef void (^TwitterClientInternalAccountCompletion)(ACAccount *account);
 
@@ -83,7 +84,7 @@ typedef void (^TwitterClientInternalAccountCompletion)(ACAccount *account);
         {
             NSURL *url = [NSURL URLWithString:@"https://api.twitter.com"
                           @"/1.1/statuses/update.json"];
-            NSDictionary *params = @{@"status": status};
+            NSDictionary *params = @{@"status": [self formattedStatus:status enclosedWithPhoto:NO]};
             SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeTwitter
                                                     requestMethod:SLRequestMethodPOST
                                                               URL:url
@@ -116,7 +117,7 @@ typedef void (^TwitterClientInternalAccountCompletion)(ACAccount *account);
         {
             NSURL *url = [NSURL URLWithString:@"https://api.twitter.com"
                           @"/1.1/statuses/update_with_media.json"];
-            NSDictionary *params = @{@"status" : status};
+            NSDictionary *params = @{@"status": [self formattedStatus:status enclosedWithPhoto:YES]};
             SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeTwitter
                                                     requestMethod:SLRequestMethodPOST
                                                               URL:url
@@ -128,6 +129,7 @@ typedef void (^TwitterClientInternalAccountCompletion)(ACAccount *account);
                              filename:@"image.jpg"];
             [request setAccount:_twitterAccount];
             [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
+                NSLog(@"RESP: %@", [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
                 dispatch_async(dispatch_get_main_queue(), ^{
                     completion(urlResponse.statusCode == 200);
                 });
@@ -225,6 +227,18 @@ typedef void (^TwitterClientInternalAccountCompletion)(ACAccount *account);
 
 - (void)actionSheetCancel:(UIActionSheet *)actionSheet {
     dispatch_semaphore_signal(_semaphore);
+}
+
+#pragma mark -
+#pragma mark - Text formatters
+
+- (NSString *)formattedStatus:(NSString *)status enclosedWithPhoto:(BOOL)photo
+{
+    NSInteger maxLength = kTwitterMaxStatusLength - (photo ? 30 : 0);
+    if (status.length < maxLength)
+        return status;
+    else
+        return [[status substringToIndex:(maxLength - 3)] stringByAppendingString:@"..."];
 }
 
 @end
