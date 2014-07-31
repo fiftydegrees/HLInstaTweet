@@ -20,14 +20,16 @@ You must use `[HLInstaTweet sharedInstaTweet]` singleton instance.
 
 ```
 - (void)shareTextStatus:(NSString *)status
-         withCompletion:(HLInstaTweetPostCompletion)completion;
+         withCompletion:(HLInstaTweetPostCompletion)completion
+            andDelegate:(id<HLInstaTweetDelegate>)delegate;
 ```
 
 **Share a photo and a status:**
 
 ```
 - (void)sharePhoto:(UIImage *)photo withTextStatus:(NSString *)status
-     withCompletion:(HLInstaTweetPostCompletion)completion;
+     withCompletion:(HLInstaTweetPostCompletion)completion
+       andDelegate:(id<HLInstaTweetDelegate>)delegate;
 ```
 
 Completion is always called **on the main thread**.
