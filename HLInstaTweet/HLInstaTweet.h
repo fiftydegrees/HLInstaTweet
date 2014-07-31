@@ -67,8 +67,6 @@ typedef void (^HLInstaTweetPostCompletion)(BOOL completed);
 
 @interface HLInstaTweet : NSObject
 
-@property (nonatomic, weak) id<HLInstaTweetDelegate> delegate;
-
 /**
  *  Singleton
  *
@@ -97,9 +95,11 @@ typedef void (^HLInstaTweetPostCompletion)(BOOL completed);
  *
  *  @param status     Status to share
  *  @param completion Completion returning whether the status has been shared or not. Executed on main thread
+ *  @param delegate   The delegate to use
  */
 - (void)shareTextStatus:(NSString *)status
-         withCompletion:(HLInstaTweetPostCompletion)completion;
+         withCompletion:(HLInstaTweetPostCompletion)completion
+            andDelegate:(id<HLInstaTweetDelegate>)delegate;
 
 /**
  *  Share a rich-media status with a status and a photo with the default account. You must handle exceptions using delegate
@@ -107,8 +107,11 @@ typedef void (^HLInstaTweetPostCompletion)(BOOL completed);
  *  @param photo      Photo to share
  *  @param status     Status to share
  *  @param completion Completion returning whether the status bar has been shared or not. Executed on main thread
+ *  @param delegate   The delegate to use
  */
-- (void)sharePhoto:(UIImage *)photo withTextStatus:(NSString *)status
-     withCompletion:(HLInstaTweetPostCompletion)completion;
+- (void)sharePhoto:(UIImage *)photo
+    withTextStatus:(NSString *)status
+     withCompletion:(HLInstaTweetPostCompletion)completion
+       andDelegate:(id<HLInstaTweetDelegate>)delegate;
 
 @end

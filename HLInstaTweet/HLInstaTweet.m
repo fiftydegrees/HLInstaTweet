@@ -25,11 +25,11 @@ typedef void (^TwitterClientInternalAccountCompletion)(ACAccount *account);
 
 @property (nonatomic, strong) dispatch_semaphore_t semaphore;
 
+@property (nonatomic, weak) id<HLInstaTweetDelegate> delegate;
+
 @end
 
 @implementation HLInstaTweet
-
-@synthesize delegate;
 
 + (HLInstaTweet *)sharedInstaTweet
 {
@@ -66,11 +66,12 @@ typedef void (^TwitterClientInternalAccountCompletion)(ACAccount *account);
 #pragma mark -
 #pragma mark - Sharing Management
 
-- (void)shareTextStatus:(NSString *)status withCompletion:(HLInstaTweetPostCompletion)completion
+- (void)shareTextStatus:(NSString *)status withCompletion:(HLInstaTweetPostCompletion)completion andDelegate:(id<HLInstaTweetDelegate>)delegate
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         
         if (!_twitterAccount) {
+            _delegate = delegate;
             [self activeSession];
             dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
         }
@@ -99,11 +100,12 @@ typedef void (^TwitterClientInternalAccountCompletion)(ACAccount *account);
     });
 }
 
-- (void)sharePhoto:(UIImage *)photo withTextStatus:(NSString *)status withCompletion:(HLInstaTweetPostCompletion)completion
+- (void)sharePhoto:(UIImage *)photo withTextStatus:(NSString *)status withCompletion:(HLInstaTweetPostCompletion)completion andDelegate:(id<HLInstaTweetDelegate>)delegate
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         
         if (!_twitterAccount) {
+            _delegate = delegate;
             [self activeSession];
             dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
         }
@@ -153,15 +155,15 @@ typedef void (^TwitterClientInternalAccountCompletion)(ACAccount *account);
          
          if (accountsArray.count == 0) {
              dispatch_semaphore_signal(_semaphore);
-             if ([delegate respondsToSelector:@selector(instaTweetClientNoAccountConfigured:)])
-                 [delegate instaTweetClientNoAccountConfigured:self];
+             if ([_delegate respondsToSelector:@selector(instaTweetClientNoAccountConfigured:)])
+                 [_delegate instaTweetClientNoAccountConfigured:self];
          }
          else if (accountsArray.count == 1)
          {
              _twitterAccount = accountsArray.firstObject;
              dispatch_semaphore_signal(_semaphore);
-             if ([delegate respondsToSelector:@selector(instaTweetClient:switchedToAccountWithUsername:)])
-                 [delegate instaTweetClient:self switchedToAccountWithUsername:_twitterAccount.username];
+             if ([_delegate respondsToSelector:@selector(instaTweetClient:switchedToAccountWithUsername:)])
+                 [_delegate instaTweetClient:self switchedToAccountWithUsername:_twitterAccount.username];
          }
          else if (accountsArray.count > 1)
          {
@@ -174,8 +176,8 @@ typedef void (^TwitterClientInternalAccountCompletion)(ACAccount *account);
                          if ([account.identifier isEqualToString:cachedAccount]) {
                              _twitterAccount = account;
                              dispatch_semaphore_signal(_semaphore);
-                             if ([delegate respondsToSelector:@selector(instaTweetClient:switchedToAccountWithUsername:)])
-                                 [delegate instaTweetClient:self switchedToAccountWithUsername:_twitterAccount.username];
+                             if ([_delegate respondsToSelector:@selector(instaTweetClient:switchedToAccountWithUsername:)])
+                                 [_delegate instaTweetClient:self switchedToAccountWithUsername:_twitterAccount.username];
                              break;
                          }
                  }
@@ -199,7 +201,7 @@ typedef void (^TwitterClientInternalAccountCompletion)(ACAccount *account);
                  
                  _accountsArray = accountsArray;
                  dispatch_async(dispatch_get_main_queue(), ^{
-                     [chooseActiveAccountActionSheet showInView:[delegate instaTweetClientWillDisplayAccountSelectorInView:self]];
+                     [chooseActiveAccountActionSheet showInView:[_delegate instaTweetClientWillDisplayAccountSelectorInView:self]];
                  });
              }
          }
@@ -220,8 +222,8 @@ typedef void (^TwitterClientInternalAccountCompletion)(ACAccount *account);
         [[NSUserDefaults standardUserDefaults] setObject:_twitterAccount.identifier forKey:kTwitterUserDefaultsKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
 
-        if ([delegate respondsToSelector:@selector(instaTweetClient:switchedToAccountWithUsername:)])
-            [delegate instaTweetClient:self switchedToAccountWithUsername:_twitterAccount.username];
+        if ([_delegate respondsToSelector:@selector(instaTweetClient:switchedToAccountWithUsername:)])
+            [_delegate instaTweetClient:self switchedToAccountWithUsername:_twitterAccount.username];
     }
 }
 

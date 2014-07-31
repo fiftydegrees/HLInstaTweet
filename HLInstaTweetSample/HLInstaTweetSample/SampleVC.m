@@ -22,7 +22,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [[HLInstaTweet sharedInstaTweet] setDelegate:self];
 }
 
 - (IBAction)didTapShareStatus:(id)sender
@@ -36,7 +35,8 @@
                                                                                    otherButtonTitles:nil];
                                           [resultAV show];
                                           resultAV = nil;
-                                      }];
+                                      }
+     andDelegate:self];
 }
 
 - (IBAction)didTapSharePhoto:(id)sender
@@ -51,7 +51,8 @@
                                                                               otherButtonTitles:nil];
                                      [resultAV show];
                                      resultAV = nil;
-                                 }];
+                                 }
+     andDelegate:self];
 }
 
 #pragma mark -
